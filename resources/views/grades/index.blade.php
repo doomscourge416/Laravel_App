@@ -3,6 +3,9 @@
 @section('title', 'Оценки ученика')
 
 @section('content')
+
+    {{ app()->getLocale() }}
+    <h2>{{ __('grades.title') }}</h2>
     <table>
         <thead>
         <tr>

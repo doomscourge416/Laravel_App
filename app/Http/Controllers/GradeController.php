@@ -8,6 +8,7 @@ class GradeController extends Controller
 {
     public function index()
     {
+        // app()->setLocale('ru_RU');
         $grades = [
             ['subject' => 'Математика', 'grade' => 5],
             ['subject' => 'Русский язык', 'grade' => 4],

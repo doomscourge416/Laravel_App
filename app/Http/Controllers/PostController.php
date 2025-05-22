@@ -2,63 +2,73 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
+
 use Illuminate\Http\Request;
+use App\Services\PostService;
 
 class PostController extends Controller
 {
-    /**
-     * Показывает список всех постов.
-     */
+    protected $service;
+
+    public function __construct(PostService $service)
+    {
+        $this->service = $service;
+    }
+
     public function index()
     {
-        return 'Список всех постов';
+
+        $posts = Post::all(); // Eloquent ORM
+        return view('posts.index', compact('posts'));
+        // $posts = $this->service->getAll();
+        // return view('posts.index', compact('posts'));
     }
 
-    /**
-     * Отображает форму создания нового поста.
-     */
     public function create()
     {
-        return 'Форма добавления нового поста';
+        return view('posts.create');
     }
 
-    /**
-     * Сохраняет новый пост.
-     */
     public function store(Request $request)
     {
-        return 'Пост успешно сохранён!';
+        $this->service->create([
+            'title' => $request->input('title'),
+            'content' => $request->input('content')
+        ]);
+
+        return redirect()->route('posts.index');
     }
 
-    /**
-     * Показывает один пост по ID.
-     */
     public function show($id)
     {
-        return "Просмотр поста #{$id}";
+        $post = $this->service->find($id);
+        if (!$post) return redirect()->route('posts.index');
+
+        return view('posts.show', compact('post'));
     }
 
-    /**
-     * Отображает форму редактирования поста.
-     */
     public function edit($id)
     {
-        return "Форма редактирования поста #{$id}";
+        $post = $this->service->find($id);
+        if (!$post) return redirect()->route('posts.index');
+
+        return view('posts.edit', compact('post'));
     }
 
-    /**
-     * Обновляет пост.
-     */
     public function update(Request $request, $id)
     {
-        return "Пост #{$id} обновлён";
+        $this->service->update($id, [
+            'title' => $request->input('title'),
+            'content' => $request->input('content')
+        ]);
+
+        return redirect()->route('posts.index');
     }
 
-    /**
-     * Удаляет пост.
-     */
     public function destroy($id)
     {
-        return "Пост #{$id} удалён";
+        $this->service->delete($id);
+        return redirect()->route('posts.index');
     }
 }

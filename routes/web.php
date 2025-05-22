@@ -7,6 +7,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\SimpleController;
 use App\Http\Controllers\GradeController;
+use App\Http\Controllers\TestLangController;
 
 
 
@@ -60,3 +61,8 @@ Route::get('/item/{id}/{action?}', [SimpleController::class, 'info']);
 
 
 Route::get('/grades', [GradeController::class, 'index'])->name('grades.index');
+
+// Маршрут проверки языков
+Route::get('/test-lang', [\App\Http\Controllers\TestLangController::class, 'index']);
+
+Route::resource('posts', PostController::class);
